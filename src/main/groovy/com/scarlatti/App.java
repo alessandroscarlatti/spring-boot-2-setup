@@ -1,10 +1,20 @@
 package com.scarlatti;
 
+import com.scarlatti.model.Fruit;
+import com.scarlatti.model.Orange;
+import com.scarlatti.model.Pineapple;
+import com.scarlatti.processor.FruitProcessor;
+import com.scarlatti.processor.FruitProcessorFactory;
+import com.scarlatti.service.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -16,7 +26,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
+    private ApplicationContext applicationContext;
+    private FruitProcessorFactory fruitProcessorFactory;
     private static final Logger log = LoggerFactory.getLogger(App.class);
+
+    public App(ApplicationContext applicationContext, FruitProcessorFactory fruitProcessorFactory) {
+        this.applicationContext = applicationContext;
+        this.fruitProcessorFactory = fruitProcessorFactory;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(App.class);
@@ -25,5 +42,33 @@ public class App implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("running app.");
+
+        Service service = applicationContext.getBean(Service.class);
+        service.serve();
+
+        Service service2 = applicationContext.getBean(Service.class);
+        service2.serve();
+
+//        Service service3 = applicationContext.getBean(Service.class, "Asdf");
+//        service3.serve();
+
+        processFruit();
+    }
+
+    private void processFruit() {
+        List<Fruit> fruits = getFruits();
+        for (Fruit fruit : fruits) {
+            FruitProcessor processor = fruitProcessorFactory.getFruitProcessor(fruit);
+            processor.process();
+        }
+
+    }
+
+    private List<Fruit> getFruits() {
+        return Arrays.asList(
+            new Pineapple(),
+            new Orange(),
+            new Pineapple()
+        );
     }
 }

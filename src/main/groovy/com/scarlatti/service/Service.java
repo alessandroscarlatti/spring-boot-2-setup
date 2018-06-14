@@ -1,4 +1,4 @@
-package com.scarlatti;
+package com.scarlatti.service;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -8,7 +8,15 @@ package com.scarlatti;
  * Saturday, 6/9/2018
  */
 public class Service {
+
+    private String name;
+
+    public Service(String name) {
+        this.name = name;
+        System.out.println("Creating new service " + name);
+    }
+
     public void serve() {
-        System.out.println("serve");
+        System.out.println("serve " + name);
     }
 }
