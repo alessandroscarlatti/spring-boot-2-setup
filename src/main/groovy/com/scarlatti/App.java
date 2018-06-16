@@ -1,7 +1,10 @@
 package com.scarlatti;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.scarlatti.model.Fruit;
 import com.scarlatti.model.Orange;
+import com.scarlatti.model.Penguin;
 import com.scarlatti.model.Pineapple;
 import com.scarlatti.processor.FruitProcessor;
 import com.scarlatti.processor.FruitProcessorFactory;
@@ -15,6 +18,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -53,6 +57,7 @@ public class App implements CommandLineRunner {
 //        service3.serve();
 
         processFruit();
+        processYml();
     }
 
     private void processFruit() {
@@ -70,5 +75,15 @@ public class App implements CommandLineRunner {
             new Orange(),
             new Pineapple()
         );
+    }
+
+    private void processYml() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+            Penguin penguin = objectMapper.readValue(new Scanner(getClass().getResourceAsStream("/stuff.yml")).useDelimiter("\\Z").next(), Penguin.class);
+            log.info("created penguin {}", penguin);
+        } catch (Exception e) {
+            throw new RuntimeException("Error reading yml", e);
+        }
     }
 }

@@ -26,6 +26,8 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
+	compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.5'
 	compile('org.codehaus.groovy:groovy')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 //	testCompile('org.springframework.batch:spring-batch-test')
