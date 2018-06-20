@@ -16,22 +16,22 @@ import java.util.function.Function;
  */
 public class FruitProcessorFactory {
 
-    // search a list of creators to find the right one
+    // search a list of definitions to find the right one
     // use the factory to get a fruit processor.
 
-    private List<FruitProcessorCreator> creators;
+    private List<FruitProcessorDefinition> definitions;
 
-    public FruitProcessorFactory(List<FruitProcessorCreator> creators) {
-        this.creators = creators;
+    public FruitProcessorFactory(List<FruitProcessorDefinition> definitions) {
+        this.definitions = definitions;
     }
 
     public FruitProcessor getFruitProcessor(Fruit fruit) {
-        FruitProcessorCreator factory = getFruitProcessorFactory(fruit);
+        FruitProcessorDefinition factory = getFruitProcessorFactory(fruit);
         return factory.build(fruit);
     }
 
-    private FruitProcessorCreator getFruitProcessorFactory(Fruit fruit) {
-        for (FruitProcessorCreator creator : creators) {
+    private FruitProcessorDefinition getFruitProcessorFactory(Fruit fruit) {
+        for (FruitProcessorDefinition creator : definitions) {
             if (creator.handlesFruit(fruit)) return creator;
         }
 
@@ -44,18 +44,18 @@ public class FruitProcessorFactory {
 
     public static class FruitProcessorFactoryBuilder {
 
-        private List<FruitProcessorCreator> creators = new ArrayList<>();
+        private List<FruitProcessorDefinition> creators = new ArrayList<>();
 
         private FruitProcessorFactoryBuilder() {
         }
 
-        public FruitProcessorFactoryBuilder withFruitProcessorCreator(FruitProcessorCreator creator) {
+        public FruitProcessorFactoryBuilder withFruitProcessorCreator(FruitProcessorDefinition creator) {
             creators.add(creator);
             return this;
         }
 
         public <I extends Fruit, O extends FruitProcessor> FruitProcessorFactoryBuilder associate(FruitType fruitType, Function<I, O> function) {
-            creators.add(new FruitProcessorCreator() {
+            creators.add(new FruitProcessorDefinition() {
                 @Override
                 public FruitType getFruitType() {
                     return fruitType;

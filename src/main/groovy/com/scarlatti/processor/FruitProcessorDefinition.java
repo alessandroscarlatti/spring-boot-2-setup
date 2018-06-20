@@ -13,7 +13,7 @@ import java.util.Objects;
  * /_/ |_/_/\__/___/___/\_,_/_//_/\_,_/_/  \___/ /___/\__/\_,_/_/ /_/\_,_/\__/\__/_/
  * Wednesday, 6/13/2018
  */
-public interface FruitProcessorCreator {
+public interface FruitProcessorDefinition {
 
     default boolean handlesFruit(Fruit fruit) {
         Objects.requireNonNull(fruit, "Fruit may not be null");
