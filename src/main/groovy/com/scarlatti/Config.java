@@ -1,10 +1,17 @@
 package com.scarlatti;
 
+import com.scarlatti.model.Fruit;
+import com.scarlatti.processor.FruitProcessor;
+import com.scarlatti.processor.FruitProcessorCreator;
+import com.scarlatti.processor.FruitProcessorFactory;
 import com.scarlatti.service.Service;
+import com.scarlatti.service.WasherService;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import java.util.List;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -23,6 +30,27 @@ public class Config {
     public Service service() {
         count++;
         return new Service(String.valueOf(count));
+    }
+
+
+    @Bean
+    FruitProcessorConfig fruitProcessorConfig(WasherService washerService) {
+        return new FruitProcessorConfig(washerService);
+    }
+
+    // this for just spring...
+//    @Bean
+//    FruitProcessorFactory fruitProcessorFactory(List<FruitProcessorCreator> creators) {
+//        return new FruitProcessorFactory(creators);
+//    }
+
+    // or this one for spring + our annotation
+    @Bean
+    FruitProcessorFactory fruitProcessorFactory(FruitProcessorConfig config) {
+        return FruitProcessorFactory
+            .emptyFactory()
+            .withFruitProcessorCreatorConfig(config)
+            .build();
     }
 
 }

@@ -3,6 +3,7 @@ package com.scarlatti.processor;
 import com.scarlatti.model.Fruit;
 import com.scarlatti.model.FruitType;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**

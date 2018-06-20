@@ -16,7 +16,8 @@ import org.springframework.context.annotation.Configuration;
  * /_/ |_/_/\__/___/___/\_,_/_//_/\_,_/_/  \___/ /___/\__/\_,_/_/ /_/\_,_/\__/\__/_/
  * Wednesday, 6/13/2018
  */
-@Configuration
+//@Configuration  // this for spring
+// nothing for spring + our annotation
 public class FruitProcessorConfig {
 
     private WasherService washerService;
@@ -25,23 +26,33 @@ public class FruitProcessorConfig {
         this.washerService = washerService;
     }
 
-    @Bean
-    public FruitProcessorCreator pineappleProcessorCreator() {
-        return new FruitProcessorCreator(FruitType.PINEAPPLE) {
-            @Override
-            public FruitProcessor build(Fruit fruit) {
-                return new PineappleProcessor(washerService, (Pineapple) fruit);
-            }
-        };
+    @FruitProcessorDefinition(FruitType.PINEAPPLE)
+    public PineappleProcessor orangeProcessorCreator2(Pineapple fruit) {
+        return new PineappleProcessor(washerService, fruit);
     }
 
-    @Bean
-    public FruitProcessorCreator orangeProcessorCreator() {
-        return new FruitProcessorCreator(FruitType.ORANGE) {
-            @Override
-            public FruitProcessor build(Fruit fruit) {
-                return new OrangeProcessor(washerService, (Orange) fruit);
-            }
-        };
+    @FruitProcessorDefinition(FruitType.ORANGE)
+    public OrangeProcessor orangeProcessorCreator2(Orange fruit) {
+        return new OrangeProcessor(washerService, fruit);
     }
+
+//    @Bean
+//    public FruitProcessorCreator pineappleProcessorCreator() {
+//        return new FruitProcessorCreator(FruitType.PINEAPPLE) {
+//            @Override
+//            public FruitProcessor build(Fruit fruit) {
+//                return new PineappleProcessor(washerService, (Pineapple) fruit);
+//            }
+//        };
+//    }
+//
+//    @Bean
+//    public FruitProcessorCreator orangeProcessorCreator() {
+//        return new FruitProcessorCreator(FruitType.ORANGE) {
+//            @Override
+//            public FruitProcessor build(Fruit fruit) {
+//                return new OrangeProcessor(washerService, (Orange) fruit);
+//            }
+//        };
+//    }
 }
