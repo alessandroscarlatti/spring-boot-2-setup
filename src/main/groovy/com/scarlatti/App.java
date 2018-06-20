@@ -82,6 +82,7 @@ public class App implements CommandLineRunner {
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
             Penguin penguin = objectMapper.readValue(new Scanner(getClass().getResourceAsStream("/stuff.yml")).useDelimiter("\\Z").next(), Penguin.class);
             log.info("created penguin {}", penguin);
+            log.info("|{}|", objectMapper.writeValueAsString(penguin));
         } catch (Exception e) {
             throw new RuntimeException("Error reading yml", e);
         }
