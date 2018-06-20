@@ -18,11 +18,11 @@ import org.springframework.context.annotation.Configuration;
  * Wednesday, 6/13/2018
  */
 @Configuration
-public class FruitProcessorConfig {
+public class FruitProcessorFactoryConfig {
 
     private WasherService washerService;
 
-    public FruitProcessorConfig(WasherService washerService) {
+    public FruitProcessorFactoryConfig(WasherService washerService) {
         this.washerService = washerService;
     }
 

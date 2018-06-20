@@ -19,15 +19,11 @@ import spock.lang.Specification
  */
 class AppTest extends Specification {
 
-    @Ignore
     def "factory has correct associations using builder from individual creators"() {
         setup:
-            FruitProcessorConfig config = new FruitProcessorConfig(Mock(WasherService))
+            FruitProcessorFactoryConfig config = new FruitProcessorFactoryConfig(Mock(WasherService))
 
-            FruitProcessorFactory fruitProcessorFactory = FruitProcessorFactory.emptyFactory()
-                    .withFruitProcessorCreator(config.orangeProcessorCreator())
-                    .withFruitProcessorCreator(config.pineappleProcessorCreator())
-                    .build()
+            FruitProcessorFactory fruitProcessorFactory = config.fruitProcessorFactory()
 
         when:
             FruitProcessor orangeProcessor = fruitProcessorFactory.getFruitProcessor(new Orange())
@@ -42,9 +38,10 @@ class AppTest extends Specification {
             pineappleProcessor instanceof PineappleProcessor
     }
 
+    @Ignore
     def "factory has correct associations using builder from config class"() {
         setup:
-            FruitProcessorConfig config = new FruitProcessorConfig(Mock(WasherService))
+            FruitProcessorFactoryConfig config = new FruitProcessorFactoryConfig(Mock(WasherService))
 
             FruitProcessorFactory fruitProcessorFactory = FruitProcessorFactory.emptyFactory()
                     .withFruitProcessorCreatorConfig(config)
