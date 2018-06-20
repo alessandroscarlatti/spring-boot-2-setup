@@ -62,7 +62,7 @@ public class FruitProcessorFactory {
                 }
 
                 @Override
-                @SuppressWarnings("unchecked")  // assume the client will check the class
+                @SuppressWarnings("unchecked")  // assume the client is using the factory to guarantee the class cast
                 public FruitProcessor build(Fruit fruit) {
                     return function.apply((I) fruit);
                 }
