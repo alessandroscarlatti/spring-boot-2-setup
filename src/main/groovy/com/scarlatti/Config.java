@@ -3,7 +3,6 @@ package com.scarlatti;
 import com.scarlatti.model.FruitType;
 import com.scarlatti.processor.FruitProcessorFactory;
 import com.scarlatti.service.Service;
-import com.scarlatti.service.WasherService;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,27 +26,4 @@ public class Config {
         count++;
         return new Service(String.valueOf(count));
     }
-
-
-    @Bean
-    FruitProcessorConfig fruitProcessorConfig(WasherService washerService) {
-        return new FruitProcessorConfig(washerService);
-    }
-
-    // this for just spring...
-//    @Bean
-//    FruitProcessorFactory fruitProcessorFactory(List<FruitProcessorCreator> creators) {
-//        return new FruitProcessorFactory(creators);
-//    }
-
-    // or this one for spring + our annotation
-    @Bean
-    FruitProcessorFactory fruitProcessorFactory(FruitProcessorConfig config) {
-        return FruitProcessorFactory
-            .emptyFactory()
-            .associate(FruitType.ORANGE, config::orangeProcessorCreator)
-            .associate(FruitType.PINEAPPLE, config::pineappleProcessorCreator)
-            .build();
-    }
-
 }
