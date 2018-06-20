@@ -30,7 +30,7 @@ public class FruitProcessorFactory {
         return factory.build(fruit);
     }
 
-    protected FruitProcessorCreator getFruitProcessorFactory(Fruit fruit) {
+    private FruitProcessorCreator getFruitProcessorFactory(Fruit fruit) {
         for (FruitProcessorCreator creator : creators) {
             if (creator.handlesFruit(fruit)) return creator;
         }
@@ -46,7 +46,7 @@ public class FruitProcessorFactory {
 
         private List<FruitProcessorCreator> creators = new ArrayList<>();
 
-        protected FruitProcessorFactoryBuilder() {
+        private FruitProcessorFactoryBuilder() {
         }
 
         public FruitProcessorFactoryBuilder withFruitProcessorCreator(FruitProcessorCreator creator) {
@@ -55,7 +55,18 @@ public class FruitProcessorFactory {
         }
 
         public <I extends Fruit, O extends FruitProcessor> FruitProcessorFactoryBuilder associate(FruitType fruitType, Function<I, O> function) {
-            creators.add(new SimpleFruitProcessorCreator<>(fruitType, function));
+            creators.add(new FruitProcessorCreator() {
+                @Override
+                public FruitType getFruitType() {
+                    return fruitType;
+                }
+
+                @Override
+                @SuppressWarnings("unchecked")  // assume the client will check the class
+                public FruitProcessor build(Fruit fruit) {
+                    return function.apply((I) fruit);
+                }
+            });
             return this;
         }
 
