@@ -1,11 +1,14 @@
 package com.scarlatti.processor;
 
 import com.scarlatti.model.Fruit;
+import com.scarlatti.model.FruitType;
+import com.scarlatti.model.Orange;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * ______    __                         __           ____             __     __  __  _
@@ -52,8 +55,24 @@ public class FruitProcessorFactory {
         }
 
         public FruitProcessorFactoryBuilder withFruitProcessorCreator(FruitProcessorCreator creator) {
-           creators.add(creator);
-           return this;
+            creators.add(creator);
+            return this;
+        }
+
+        public <I extends Fruit, O extends FruitProcessor> FruitProcessorFactoryBuilder associate(FruitType fruitType, Function<I, O> function) {
+            creators.add(new FruitProcessorCreator() {
+                @Override
+                public FruitType getFruitType() {
+                    return fruitType;
+                }
+
+                @Override
+                @SuppressWarnings("unchecked") // OK because we are counting on the factory working properly!
+                public FruitProcessor build(Fruit fruit) {
+                    return function.apply((I) fruit);
+                }
+            });
+            return this;
         }
 
         public FruitProcessorFactoryBuilder withFruitProcessorCreatorConfig(Object o) {
@@ -69,7 +88,13 @@ public class FruitProcessorFactory {
 
                 validateMethod(method);
 
-                creators.add(new FruitProcessorCreator(definition.value()) {
+                creators.add(new FruitProcessorCreator() {
+
+                    @Override
+                    public FruitType getFruitType() {
+                        return definition.value();
+                    }
+
                     @Override
                     public FruitProcessor build(Fruit fruit) {
                         try {
@@ -89,9 +114,12 @@ public class FruitProcessorFactory {
 
         private void validateMethod(Method method) {
             Class<?>[] classes = method.getParameterTypes();
-            if (classes.length != 1) throw new RuntimeException("Illegal method definition for default fruit processor creator: wrong number of args");
-            if (!Fruit.class.isAssignableFrom(classes[0])) throw new RuntimeException("Illegal method definition for default fruit processor creator: wrong arg type");
-            if (!FruitProcessor.class.isAssignableFrom(method.getReturnType())) throw new RuntimeException("Illegal method definition for default fruit processor creator: wrong retrun type");
+            if (classes.length != 1)
+                throw new RuntimeException("Illegal method definition for default fruit processor creator: wrong number of args");
+            if (!Fruit.class.isAssignableFrom(classes[0]))
+                throw new RuntimeException("Illegal method definition for default fruit processor creator: wrong arg type");
+            if (!FruitProcessor.class.isAssignableFrom(method.getReturnType()))
+                throw new RuntimeException("Illegal method definition for default fruit processor creator: wrong retrun type");
         }
 
         public FruitProcessorFactory build() {

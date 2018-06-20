@@ -7,6 +7,7 @@ import com.scarlatti.processor.FruitProcessorFactory
 import com.scarlatti.processor.OrangeProcessor
 import com.scarlatti.processor.PineappleProcessor
 import com.scarlatti.service.WasherService
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -18,6 +19,7 @@ import spock.lang.Specification
  */
 class AppTest extends Specification {
 
+    @Ignore
     def "factory has correct associations using builder from individual creators"() {
         setup:
             FruitProcessorConfig config = new FruitProcessorConfig(Mock(WasherService))

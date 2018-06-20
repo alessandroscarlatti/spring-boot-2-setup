@@ -13,18 +13,14 @@ import java.util.Objects;
  * /_/ |_/_/\__/___/___/\_,_/_//_/\_,_/_/  \___/ /___/\__/\_,_/_/ /_/\_,_/\__/\__/_/
  * Wednesday, 6/13/2018
  */
-public abstract class FruitProcessorCreator {
+public interface FruitProcessorCreator {
 
-    private FruitType fruitType;
-
-    protected FruitProcessorCreator(FruitType fruitType) {
-        this.fruitType = fruitType;
-    }
-
-    public boolean handlesFruit(Fruit fruit) {
+    default boolean handlesFruit(Fruit fruit) {
         Objects.requireNonNull(fruit, "Fruit may not be null");
-        return fruit.getType() == fruitType;
+        return fruit.getType() == getFruitType();
     }
 
-    public abstract FruitProcessor build(Fruit fruit);
+    FruitType getFruitType();
+
+    FruitProcessor build(Fruit fruit);
 }
